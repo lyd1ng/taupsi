@@ -25,6 +25,8 @@
 #let COLOUR_PALETTE = state("color_palette", (:)) // as defined in colours.typ
 #let SIZE0 = state("size0", ()) // Large font size
 #let SIZE1 = state("size1", ()) // Small font size
+#let SECTIONS = state("sections",()) // A list of sections from which the table
+                                     // of content will be generated
 #let SLIDE_COUNTER = counter("slide_counter")
 
 // Shows the authors and their affiliations
@@ -69,7 +71,6 @@
 #let slide(section, subsection, colour_palette: default_colours, body) = {
   set page(
     background: context{
-      SLIDE_COUNTER.step()
       place(top + left)[
         #block(
           width: 100%,
@@ -92,11 +93,50 @@
   body
 }
 
+#let generate_slide(section, subsection, descriptor) = {
+  for i in range(descriptor.at(0)) {
+    SLIDE_COUNTER.step()
+    slide(section, subsection, descriptor.at(1)(i))
+  }
+}
+
+#let titlepage() = {
+  page(
+    background: context{
+      place(top + left)[
+        #block(
+          width: 100%,
+          height: 1em,
+          fill: COLOUR_PALETTE.get().at("foreground"),
+          inset: (x: 0.25em, y: 20%))
+      ]
+      place(bottom + left)[
+        #block(
+          width: 100%,
+          height: 1em,
+          fill: COLOUR_PALETTE.get().at("foreground"),
+          inset: (x: 0.25em, y: 20%))
+      ]
+    }
+  )[
+    #align(center + horizon)[
+      #block(
+        height: 33%,
+        width:100%,
+        fill: COLOUR_PALETTE.get().at("foreground"))[
+          #text(fill: COLOUR_PALETTE.get().at("background"), TITLE.get().at(0))
+          #v(5%)
+          #authors_and_affiliations()
+        ]
+      ]
+    ]
+}
+
 #let setup(
   title,
   short_title,
   authors,
-  colour_palette: default_colours,
+  colour_palette,
   size0: 20pt,
   size1: 14pt,
   body) = {
@@ -111,17 +151,24 @@
   set page(paper: "presentation-16-9")
   // Set the default fontsize to the size0
   set text(size: SIZE0.get())
+  titlepage()
   body
   }
 }
 
 #let authors = (
   ("Lyding I", "HU"),
-  ("Lyding II", "USU")
 )
 
-#setup("FOO", "F", authors)[
-  #slide("FOO", "BAR")[
-    #list([A], [B], [C], [D])
-  ]
+#let example_list = (
+  ("S", [A]),
+  ("S", [B]),
+  ("S", [C]),
+)
+
+#setup("FOO", "", authors, default_colours)[
+  // Set the default color of the highlight_container
+  #let Highlight = Highlight.with(colour_palette: default_colours)
+  #generate_slide("Section I", "Subsection I.I",
+    Center(Highlight(list_descriptor(example_list))))
 ]
