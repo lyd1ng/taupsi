@@ -16,5 +16,5 @@
 #let default_colours = (
   foreground: rgb(160, 0, 0),
   background: rgb(255, 255, 255),
-  enframed:   rgb(80, 80, 80)
+  enframed:   rgb(160, 160, 160),
 )
