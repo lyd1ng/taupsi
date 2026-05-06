@@ -95,6 +95,27 @@
   return (max_step, inner)
 }
 
+// The equation descriptor describes an equation which can be shown gradually
+// The equation is described as a simple list of mathematical content
+#let equation_descriptor(equation) = {
+  let inner(step) = { return equation.at(step) }
+  return (equation.len(), inner)
+}
+
+// This is in alternative equation descriptor where full equation is
+// the sum over all elements.
+#let equation_descriptor2(equation) = {
+  let inner(step) = {
+    step += 1
+    let content = []
+    for i in range(step) { 
+      content += equation.at(i)
+    }
+    return content
+  }
+  return (equation.len(), inner)
+}
+
 // The concatenate_descriptors function is the canonical way to add
 // descriptors.
 #let concatenate_descriptors(descriptor1, descriptor2) = {
@@ -153,3 +174,18 @@
 // #added_descriptor.at(1)(1)
 
 // #componentwise_add_descriptors(descriptor1, descriptor2).at(1)(3)
+//
+
+#let equation1 = (
+  [$1$],
+  [$1 + 2$],
+  [$1 + 2 + 3$],
+  [$1 + 2 + 3 + 4$]
+)
+
+#let equation2 = (
+  [$1$],
+  [$+2$],
+  [$+3$],
+  [$+4$]
+)
