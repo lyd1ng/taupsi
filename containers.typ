@@ -20,7 +20,9 @@
 * have a list acompanied by a diashow of figures etc...
 */
 
-#let place_container(
+#import "colours.typ": *
+
+#let Place(
   alignment,
   descriptor,
   scope: "parent",
@@ -39,4 +41,36 @@
         descriptor.at(1)(step))
     }
     return (descriptor.at(0), inner)
+}
+
+#let Entitle(title, size, spacing, descriptor) = {
+  let inner(step) = {
+    underline(text(size: size, title + ":"))
+    v(spacing)
+    descriptor.at(1)(step)
+  }
+  return (descriptor.at(0), inner)
+}
+
+#let Highlight(descriptor, colour_palette: default_colours) = {
+  let inner(step) = {
+    box(
+      inset: 0.25em,
+      outset: 0.25em,
+      stroke: (
+        paint: colour_palette.at("foreground"),
+        thickness: 0.125em),
+      fill: colour_palette.at("enframed"))[
+        #descriptor.at(1)(step)]
+  }
+  return (descriptor.at(0), inner)
+}
+
+#let Center(descriptor) = {
+  let inner(step) = {
+    align(center + horizon)[
+      #descriptor.at(1)(step)
+    ]
+  }
+  return (descriptor.at(0), inner)
 }
