@@ -74,3 +74,10 @@
   }
   return (descriptor.at(0), inner)
 }
+
+#let Map(fn, descriptor) = {
+  let inner(step) = {
+    fn(descriptor.at(1)(step))
+  }
+  return (descriptor.at(0), inner)
+}
