@@ -75,7 +75,7 @@
 
 // The image_scatter descriptor describes a set of images placed arbitrarily
 // on the slide. The images are described as a list of tuples of the
-// form (path, x, y, width, height)
+// form (path, width, height, x, y)
 #let image_scatter_descriptor(images) = {
   let max_step = images.len()
   let inner(step) = {
@@ -140,6 +140,14 @@
     return descriptor1.at(1)(step) + descriptor2.at(1)(step)
   }
   return (max_step1, inner)
+}
+
+// Lift a simple content to the category?! of descriptors
+#let lift(content, max_step: 1) = {
+  let inner(step) = {
+    return content
+  }
+  return (max_step, inner)
 }
 
 // =============================================================================

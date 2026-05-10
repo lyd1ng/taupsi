@@ -27,7 +27,7 @@
   descriptor,
   scope: "parent",
   float: true,
-  clearance: 1.5em,
+  clearance: 0pt,
   dx: 0% + 0pt,
   dy: 0% + 0pt) = {
     let inner(step) = {
