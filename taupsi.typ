@@ -14,19 +14,7 @@
 #import "descriptors.typ": *
 #import "containers.typ": *
 #import "colours.typ": *
-
-// These states are set inside the setup funcition and *SHOULD NOT* be
-// set anywhere else except one knows exactly what they are doing.
-// It might be more paradigmatic to pass those variables as optional
-// parameters which could then be set by show rules but this would
-// require more typing^^
-#let TITLE = state("title", ()) // Of the form (title, short title)
-#let AUTHORS = state("authors", ()) // Of the form [(name, affiliation),..]
-#let COLOUR_PALETTE = state("color_palette", (:)) // as defined in colours.typ
-#let SIZE0 = state("size0", ()) // Large font size
-#let SIZE1 = state("size1", ()) // Small font size
-                                     // of content will be generated
-#let SLIDE_COUNTER = counter("slide_counter")
+#import "state.typ": *
 
 // Shows the authors and their affiliations
 // the authors parameter is a list of tuples of the form (name, affiliations)
@@ -64,24 +52,22 @@
 }
 
 #let slide_counter() = {
-  context {
-    set text(
-      fill: COLOUR_PALETTE.get().at("background"),
-      size: SIZE1.get())
-    text(SLIDE_COUNTER.display()) + "/" + [#SLIDE_COUNTER.final().at(0)]
-  }
+  set text(
+    fill: COLOUR_PALETTE.get().at("background"),
+    size: SIZE1.get())
+  text(SLIDE_COUNTER.display()) + "/" + [#SLIDE_COUNTER.final().at(0)]
 }
 
 #let slide(section, subsection, colour_palette: default_colours, body) = {
   set page(
-    background: context{
+    background:
       place(top + left)[
         #block(
           width: 100%,
           height: auto,
           fill: COLOUR_PALETTE.get().at("foreground"),
           inset: (x: 0.25em, y: 20%))[#title_and_section(section, subsection)]
-      ]
+      ] + 
       place(bottom + left)[
         #block(
           width: 100%,
@@ -92,15 +78,19 @@
             #place(horizon + right)[#slide_counter()]
           ]
       ]
-    }
   )
   body
 }
 
-#let generate_slide(section, subsection, descriptor) = {
+#let generate_slide(descriptor, section: "", subsection: "") = context{
   SLIDE_COUNTER.step()
   for i in range(descriptor.at(0)) {
-    slide(section, subsection, descriptor.at(1)(i))
+    if (section != "") {
+      slide(section, subsection, descriptor.at(1)(i))
+    }
+    else {
+      slide(SECTIONS.get().last(), subsection, descriptor.at(1)(i))
+    }
   }
 }
 
@@ -136,18 +126,18 @@
     ]
 }
 
-#let section_page(section) = {
+#let section_page(section) = context{
+  SLIDE_COUNTER.step()
+  SECTIONS.update(arr => arr + (section,))
   page(
-    background: context{
-      SLIDE_COUNTER.step()
-      SECTIONS.update(SECTIONS.get() + (section,))
+    background:
       place(top + left)[
         #block(
           width: 100%,
           height: auto,
           fill: COLOUR_PALETTE.get().at("foreground"),
           inset: (x: 0.25em, y: 20%))[#title_and_section(section, "")]
-      ]
+      ] + 
       place(bottom + left)[
         #block(
           width: 100%,
@@ -157,22 +147,21 @@
             #authors_and_affiliations()
             #place(horizon + right)[#slide_counter()]
           ]
-      ]
+      ] + 
       align(center + horizon,
       block(width: 61.8%, height: 33%,
       fill: COLOUR_PALETTE.get().at("foreground"),
       text(SIZE0.get(), fill: COLOUR_PALETTE.get().at("background"), section)))
-    }
   )[]
 }
 
-#let generate_table_of_content(sections, size) = {
+#let generate_table_of_content() = context{
   let entries = ()
-  for section in sections {
+  for section in SECTIONS.final() {
     entries.push(("S", section))
   }
-  generate_slide("Table of Content", none,
-    Entitle("Table of Content", size, 0.5em, list_descriptor(entries)))
+  generate_slide(section: "Table of Content",
+    Entitle("Table of Content", SIZE0.get(), 0.5em, list_descriptor(entries)))
 }
 
 #let setup(
@@ -180,8 +169,8 @@
   short_title,
   authors,
   colour_palette,
-  size0: 20pt,
-  size1: 14pt,
+  size0: 24pt,
+  size1: 18pt,
   body) = {
   // Update States
   TITLE.update((title, short_title))
@@ -189,29 +178,10 @@
   COLOUR_PALETTE.update(colour_palette)
   SIZE0.update(size0)
   SIZE1.update(size1)
-  context {
   // Set the page of the presentation correctly
   set page(paper: "presentation-16-9")
   // Set the default fontsize to the size0
-  set text(size: SIZE0.get())
-  titlepage()
-    body
-  }
+  set text(size: size1)
+  context{ titlepage() }
+  body
 }
-
-#let authors = (
-  ("Lyding I", "HU"),
-)
-
-#let example_list = (
-  ("S", [A]),
-  ("S", [B]),
-  ("S", [C]),
-)
-
-#setup("FOO", "", authors, default_colours)[
-  // Set the default color of the highlight_container
-  #let Highlight = Highlight.with(colour_palette: default_colours)
-  #generate_slide("Section I", "Subsection I.I",
-    Center(Highlight(list_descriptor(example_list))))
-]

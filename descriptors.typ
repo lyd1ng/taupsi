@@ -102,20 +102,6 @@
   return (equation.len(), inner)
 }
 
-// This is in alternative equation descriptor where full equation is
-// the sum over all elements.
-#let equation_descriptor2(equation) = {
-  let inner(step) = {
-    step += 1
-    let content = []
-    for i in range(step) { 
-      content += equation.at(i)
-    }
-    return content
-  }
-  return (equation.len(), inner)
-}
-
 // The concatenate_descriptors function is the canonical way to add
 // descriptors.
 #let concatenate_descriptors(descriptor1, descriptor2) = {

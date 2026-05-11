@@ -21,6 +21,7 @@
 */
 
 #import "colours.typ": *
+#import "state.typ": *
 
 #let Place(
   alignment,
@@ -52,15 +53,15 @@
   return (descriptor.at(0), inner)
 }
 
-#let Highlight(descriptor, colour_palette: default_colours) = {
+#let Highlight(descriptor) = {
   let inner(step) = {
     box(
       inset: 0.25em,
       outset: 0.25em,
       stroke: (
-        paint: colour_palette.at("foreground"),
+        paint: COLOUR_PALETTE.get().at("foreground"),
         thickness: 0.125em),
-      fill: colour_palette.at("enframed"))[
+      fill: COLOUR_PALETTE.get().at("enframed"))[
         #descriptor.at(1)(step)]
   }
   return (descriptor.at(0), inner)
