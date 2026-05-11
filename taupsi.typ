@@ -25,7 +25,6 @@
 #let COLOUR_PALETTE = state("color_palette", (:)) // as defined in colours.typ
 #let SIZE0 = state("size0", ()) // Large font size
 #let SIZE1 = state("size1", ()) // Small font size
-#let SECTIONS = state("sections",()) // A list of sections from which the table
                                      // of content will be generated
 #let SLIDE_COUNTER = counter("slide_counter")
 
@@ -55,7 +54,12 @@
     }else {
       text(TITLE.get().at(0))
     }
-    place(horizon + right, text(section + ", " + subsection, fill: COLOUR_PALETTE.get().at("background")))
+    if (subsection != none and subsection != "") {
+      place(horizon + right, text(section + ", " + subsection, fill: COLOUR_PALETTE.get().at("background")))
+    }
+    else {
+      place(horizon + right, text(section, fill: COLOUR_PALETTE.get().at("background")))
+    }
   }
 }
 
@@ -94,8 +98,8 @@
 }
 
 #let generate_slide(section, subsection, descriptor) = {
+  SLIDE_COUNTER.step()
   for i in range(descriptor.at(0)) {
-    SLIDE_COUNTER.step()
     slide(section, subsection, descriptor.at(1)(i))
   }
 }
@@ -132,6 +136,45 @@
     ]
 }
 
+#let section_page(section) = {
+  page(
+    background: context{
+      SLIDE_COUNTER.step()
+      SECTIONS.update(SECTIONS.get() + (section,))
+      place(top + left)[
+        #block(
+          width: 100%,
+          height: auto,
+          fill: COLOUR_PALETTE.get().at("foreground"),
+          inset: (x: 0.25em, y: 20%))[#title_and_section(section, "")]
+      ]
+      place(bottom + left)[
+        #block(
+          width: 100%,
+          height: auto,
+          fill: COLOUR_PALETTE.get().at("foreground"),
+          inset: (x: 0.25em, y: 20%))[
+            #authors_and_affiliations()
+            #place(horizon + right)[#slide_counter()]
+          ]
+      ]
+      align(center + horizon,
+      block(width: 61.8%, height: 33%,
+      fill: COLOUR_PALETTE.get().at("foreground"),
+      text(SIZE0.get(), fill: COLOUR_PALETTE.get().at("background"), section)))
+    }
+  )[]
+}
+
+#let generate_table_of_content(sections, size) = {
+  let entries = ()
+  for section in sections {
+    entries.push(("S", section))
+  }
+  generate_slide("Table of Content", none,
+    Entitle("Table of Content", size, 0.5em, list_descriptor(entries)))
+}
+
 #let setup(
   title,
   short_title,
@@ -152,7 +195,7 @@
   // Set the default fontsize to the size0
   set text(size: SIZE0.get())
   titlepage()
-  body
+    body
   }
 }
 

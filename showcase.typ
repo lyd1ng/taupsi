@@ -4,9 +4,13 @@
   ("Lyding I", "HU"),
 )
 
+#let sections = ("Descriptors",)
+
 #setup("Title of the Presentation", "Title of presi", authors, default_colours)[
   // Set the default color of the highlight_container
   #let Highlight = Highlight.with(colour_palette: default_colours)
+  #generate_table_of_content(sections, 24pt)
+  #section_page("Descriptors")
   #generate_slide("Descriptors", "Lists",
     componentwise_add_descriptors(
       list_descriptor((
@@ -52,6 +56,7 @@
         [$ 1 $],
         [$ 1 + 2 $],
         [$ 1 + 2 + 3 $]))", max_step: 3)
+
       ))
     )
   )
