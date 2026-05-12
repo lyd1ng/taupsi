@@ -128,12 +128,20 @@
   return (max_step1, inner)
 }
 
-// Lift a simple content to the category?! of descriptors
-#let lift(content, max_step: 1) = {
+// Monadic return: Puts content into the context of being a description
+#let mreturn(content, max_step: 1) = {
   let inner(step) = {
     return content
   }
   return (max_step, inner)
+}
+
+// Monadic bind: Maps fn overeach element of the description
+#let mbind(fn, descriptor) = {
+  let inner(step) = {
+    fn(descriptor.at(1)(step))
+  }
+  return (descriptor.at(0), inner)
 }
 
 // =============================================================================

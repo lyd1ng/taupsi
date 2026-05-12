@@ -25,8 +25,8 @@
   #generate_slide(subsection: "Algebraic Structure",
     list_descriptor((
       ("M", (
-        [lift :: Content -> N -> Description], 
-        [lift :: Content -> N -> Description \ Used to list content to the structure of descriptions])),
+        [mreturn :: Content -> N -> Description], 
+        [mreturn :: Content -> N -> Description \ Used to list content to the structure of descriptions])),
       ("S", [Might be monadic in nature?!]))))
   #generate_slide(subsection: "Arithmetic(s)",
     list_descriptor((
@@ -52,7 +52,7 @@
         ("B", ([Block Item A], [Block Item B], [Block Item C])),
         ("M", ([Gradually], [Gradually Revealing], [Gradually Revealing Item])))),
       Place(bottom, Highlight(
-        lift("list_descriptor((\n"+
+        mreturn("list_descriptor((\n"+
           "(\"S\", [Single Item 1]),\n"+
           "(\"S\", [Single Item 2]),\n"+
           "(\"B\", ([Block Item A], [Block Item B], [Block Item C])),\n"+
@@ -68,7 +68,7 @@
         ("image2.jpg", 25%, 25%, 50%, 25%),
         ("image3.jpg", 25%, 25%, 50%, 70%))),
       Place(bottom, clearance: 0pt, Highlight(
-        lift("image_scatter_descriptor((\n"+
+        mreturn("image_scatter_descriptor((\n"+
           "(\"image1.jpg\", 25%, 25%, 0%, 0%)\n"+
           "(\"image2.jpg\", 25%, 25%, 50%, 25%)\n"+
           "(\"image3.jpg\", 25%, 25%, 50%, 60%)))", max_step: 3)
@@ -82,7 +82,7 @@
         [$ 1 + 2 $],
         [$ 1 + 2 + 3 $])),
       Place(center + bottom, clearance: 0pt, Highlight(
-        lift("equation_descriptor(([$ 1 $],[$ 1 + 2 $],[$ 1 + 2 + 3 $]))", max_step: 3)
+        mreturn("equation_descriptor(([$ 1 $],[$ 1 + 2 $],[$ 1 + 2 + 3 $]))", max_step: 3)
       ))
     )
   )
