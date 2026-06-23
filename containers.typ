@@ -26,15 +26,13 @@
 #let Place(
   alignment,
   descriptor,
-  scope: "parent",
-  float: true,
+  float: false,
   clearance: 0pt,
   dx: 0% + 0pt,
   dy: 0% + 0pt) = {
     let inner(step) = {
       return place(
         alignment,
-        scope: scope,
         float: float,
         clearance: clearance,
         dx: dx,

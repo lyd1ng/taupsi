@@ -144,6 +144,15 @@
   return (descriptor.at(0), inner)
 }
 
+#let chain(..descriptors) = {
+  let descs = descriptors.pos()
+  let result = descs.at(0)
+  for i in range(1, descs.len()) {
+    result = concatenate_descriptors(result, descs.at(i))
+  }
+  result
+}
+
 // =============================================================================
 // TEST CODE
 // =============================================================================

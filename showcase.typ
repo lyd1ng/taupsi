@@ -4,7 +4,7 @@
   ("Lyding Brumm", "HU"),
 )
 
-#setup("Title of the Presentation", "Title of presi", authors, default_colours)[
+#setup("Showcase of the TauPsi Framework", "TauPsi", authors, default_colours)[
   #generate_table_of_content()
 
   #section_page("Concepts")
@@ -21,13 +21,13 @@
     ("M", (
       [*Container :: Parameters x Description -> Description*],
       [*Container :: Parameters x Description -> Description* \ Used to add extra 'stuff' to descriptions]))
-    )))
+    )), title: "Concepts")
   #generate_slide(subsection: "Algebraic Structure",
     list_descriptor((
       ("M", (
         [mreturn :: Content -> N -> Description], 
         [mreturn :: Content -> N -> Description \ Used to list content to the structure of descriptions])),
-      ("S", [Might be monadic in nature?!]))))
+      ("S", [Monadic nature (mreturn, mbind are defined in descriptors.typ)]))))
   #generate_slide(subsection: "Arithmetic(s)",
     list_descriptor((
       ("M", (
@@ -86,4 +86,26 @@
       ))
     )
   )
+
+  #section_page("Containers")
+  #generate_slide(subsection: "",
+    list_descriptor((
+      ("S", [containers :: (parameters) -> description -> description]),
+      ("S", [Used to add extra content or change representation of description]),
+      ("B", (
+        [Place: Exposes the place function to a whole description],
+        [Entitle: Adds a title to a description],
+        [Highlight: Highlights a descriptor],
+        [Center: Centers a description],
+        [mbind: Following the definition mbind is a container as well],
+      ))
+    )))
+
+  #section_page("How to use")
+  #generate_slide(subsection: "",
+    list_descriptor((
+      ("S", [All informations like title, colours, font size etc. is specified in setup]),
+      ("S", [The body of the setup function describes the whole presentation]),
+      ("S", [generate_slides :: description -> \[slides\]\), generates slides from a description]),
+      ("S", [Profit]))))
 ]

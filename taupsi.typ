@@ -82,6 +82,7 @@
   body
 }
 
+/*
 #let generate_slide(descriptor, section: "", subsection: "") = context{
   SLIDE_COUNTER.step()
   for i in range(descriptor.at(0)) {
@@ -91,6 +92,24 @@
     else {
       slide(SECTIONS.get().last(), subsection, descriptor.at(1)(i))
     }
+  }
+*/
+
+#let generate_slide(descriptor, section: "", subsection: "", title: none) = context{
+  SLIDE_COUNTER.step()
+  let final_descriptor = if title != none {
+    componentwise_add_descriptors(
+      Place(top + center, mreturn(
+        block(below: 0.4em, align(center)[#text(weight: "bold")[#title]])
+        + rect(width: 80%, height: 1pt, fill: gradient.linear((luma(0%).transparentize(100%),0%),(luma(0%),20%),(luma(0%),80%),(luma(0%).transparentize(100%),100%))),
+        max_step: descriptor.at(0))),
+      mbind(element => v(2.5em) + element, descriptor)
+    )
+  } else {
+    descriptor
+  }
+  for i in range(final_descriptor.at(0)) {
+    slide(section, subsection, final_descriptor.at(1)(i))
   }
 }
 
