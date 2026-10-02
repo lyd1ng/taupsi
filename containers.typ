@@ -73,3 +73,47 @@
   }
   return (descriptor.at(0), inner)
 }
+
+#let Grid(
+  columns: (),
+  rows: (),
+  gutter: (),
+  column-gutter: (),
+  row-gutter: (),
+  inset: (:),
+  align: auto,
+  fill: none,
+  stroke: (:),
+  sequence: (),
+  ..children
+) = {
+  // If the sequence is empty all descriptors are stepped through
+  // in parallel. If descriptors are of unequal length the shorter
+  // descriptors will simply remain static while the longer descriptors
+  // are still stepped through
+  // Otherwise the different descriptors are stepped through in the 
+  // order specified by sequence.
+  if (sequence.len() == 0) {
+    let inner(step) = {
+      // Evaluate the descriptors in the children list to content
+      contents = map(d => d.at(1)(max(step, d.at(0))))
+      // Build the grid using the evaluated descriptors
+      return grid(columns, rows, gutter, column-gutter, row-gutter,
+                  inset, align, fill, stroke, contents)
+    }
+    return (max(map(d => d.at(0), children)), inner)
+  }
+  else {
+    assert(sequence.len() == children.len(), message: "Incomplete sequence")
+    let max_step = children.reduce((x, y) => x.at(0) + y.at(0), 0)
+    let inner(step) = {
+      // TODO: Implement the sequential grid container
+      // step has to be broken down to such that always the current
+      // descriptor gets stepped throuh while all previous descriptors
+      // remain at their last respective step and all following descriptors
+      // are not stepped already
+      return []
+    }
+    return (max_step, inner)
+  }
+}
