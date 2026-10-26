@@ -51,7 +51,7 @@
         ("S", [Single Item 2]),
         ("B", ([Block Item A], [Block Item B], [Block Item C])),
         ("M", ([Gradually], [Gradually Revealing], [Gradually Revealing Item])))),
-      Place(bottom, Highlight(
+      Place(bottom, StaticHighlight(
         mreturn("list_descriptor((\n"+
           "(\"S\", [Single Item 1]),\n"+
           "(\"S\", [Single Item 2]),\n"+

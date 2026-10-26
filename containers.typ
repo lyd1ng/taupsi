@@ -65,6 +65,43 @@
   return (descriptor.at(0), inner)
 }
 
+#let StaticHighlight(descriptor) = {
+  let inner(step) = {
+    context{
+      let size = measure(descriptor.at(1)(descriptor.at(0) - 1))
+      box(
+        outset: 0.50em,
+        stroke: (
+          paint: COLOUR_PALETTE.get().at("foreground"),
+          thickness: 0.125em),
+        fill: COLOUR_PALETTE.get().at("enframed"),
+        width: size.width,
+        height: size.height)[
+          #descriptor.at(1)(step)]
+    }
+  }
+  return (descriptor.at(0), inner)
+}
+
+#let StaticHighlight2(step, descriptor) = {
+  let inner(step) = {
+    context{
+      let size = measure(descriptor.at(1)(step))
+      box(
+        outset: 0.50em,
+        stroke: (
+          paint: COLOUR_PALETTE.get().at("foreground"),
+          thickness: 0.125em),
+        fill: COLOUR_PALETTE.get().at("enframed"),
+        width: size.width,
+        height: size.height)[
+          #descriptor.at(1)(step)]
+    }
+  }
+  return (descriptor.at(0), inner)
+}
+
+
 #let Center(descriptor) = {
   let inner(step) = {
     align(center + horizon)[
