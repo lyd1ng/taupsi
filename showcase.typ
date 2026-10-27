@@ -61,7 +61,22 @@
       ))
     )
   )
-  #generate_slide(subsection: "Images",
+  #generate_slide(subsection: "General Scatter",
+    componentwise_add_descriptors(
+      scatter_descriptor((
+        ([A], 0%, 0%),
+        ([B], 50%, 25%),
+        ([C], 50%, 70%))),
+      Place(bottom, clearance: 0pt, Highlight(
+        mreturn(
+        "scatter_descriptor((\n" + 
+          "([A], 0%, 0%),\n" + 
+          "([B], 50%, 25%),\n" + 
+          "([C], 50%, 70%))),\n", max_step: 3)
+      ))
+    )
+  )
+  #generate_slide(subsection: "Image Scatter",
     componentwise_add_descriptors(
       image_scatter_descriptor((
         ("image1.jpg", 25%, 25%, 0%, 0%),

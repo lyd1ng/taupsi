@@ -73,6 +73,25 @@
   return (max_step, inner)
 }
 
+// The scatter descriptor describes a set of content placed arbitrarily
+// on the slide. The contents are describes as a list of tuples of the
+// form (content, x, y)
+#let scatter_descriptor(contents) = {
+  let max_step = contents.len()
+  let inner(step) = {
+    step += 1
+    let result = []
+    for i in range(step){
+      if (contents.at(i) == none) { continue }
+      let x = contents.at(i).at(1)
+      let y = contents.at(i).at(2)
+      result += place(dx: x, dy: y, contents.at(i).at(0),)
+    }
+    return result
+  }
+  return (max_step, inner)
+}
+
 // The image_scatter descriptor describes a set of images placed arbitrarily
 // on the slide. The images are described as a list of tuples of the
 // form (path, width, height, x, y)
@@ -149,6 +168,15 @@
   let result = descs.at(0)
   for i in range(1, descs.len()) {
     result = concatenate_descriptors(result, descs.at(i))
+  }
+  result
+}
+
+#let swage(..descriptors) = {
+  let descs = descriptors.pos()
+  let result = descs.at(0)
+  for i in range(1, descs.len()) {
+    result = componentwise_add_descriptors(result, descs.at(i))
   }
   result
 }
