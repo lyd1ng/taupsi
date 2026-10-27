@@ -181,6 +181,21 @@
   result
 }
 
+#let weave(descriptor1, descriptor2) = {
+  let max_step1 = descriptor1.at(0)
+  let max_step2 = descriptor2.at(0)
+  assert(max_step1 == max_step2)
+  let inner(step) = {
+    if (calc.rem(step, 2) == 0) {
+      return descriptor1.at(1)(int(step / 2))
+    }
+    else {
+      return descriptor1.at(1)(int(step / 2) + 1)
+    }
+  }
+  return (max_step1 + max_step2, inner)
+}
+
 // =============================================================================
 // TEST CODE
 // =============================================================================
